@@ -19,134 +19,86 @@ import org.apache.log4j.Logger;
  */
 public class Friend_Tuple implements WritableComparable<Friend_Tuple>
 {
-    private Text PersonA;
-    private Text PersonB;
-    private Text separator;
+    private String user;
+    private String friend;
+    private final String separator="-";
     private static Logger log= Logger.getLogger(Friend_Tuple.class);
     public Friend_Tuple()
     {
-        this.separator = new Text("-");
-        this.PersonA = new Text();
-        this.PersonB=new Text();
+        this.user = new String();
+        this.friend=new String();
     }
-    public Friend_Tuple(String persons_concated)
+    public Friend_Tuple(String user,String common)
     {
-        this.separator = new Text("-");
-        String temp [] = persons_concated.split(String.valueOf(this.separator));
-        this.PersonA=new Text(temp[0]);
-        this.PersonB=new Text(temp[1]);
+            this.user=user.trim();
+            this.friend=common.trim();
     }
 
     @Override
     public void write(DataOutput out) throws IOException {
-        //out.writeBytes(this.getPersonA().toString()+this.separator+this.getPersonB().toString());
-        PersonA.write(out);
-        PersonB.write(out);
+        out.writeBytes(user+separator+friend);
     }
 
     @Override
     public void readFields(DataInput in) throws IOException {
-        /*String con_pers = in.readLine();
-        String temp [] = con_pers.split(String.valueOf(separator));
-        this.setPersonA(temp[0]);
-        this.setPersonB(temp[1]);*/
-        PersonB.readFields(in);
-        PersonA.readFields(in);
+
+       {
+           String temp [] = in.readLine().split(separator);
+            this.user=temp[0];
+            this.friend=temp[1];
+       }
+
     }
 
     /**
      * @return the PersonA
      */
-    public Text getPersonA() {
-        return PersonA;
+    public String getUser() {
+        return user;
     }
 
     /**
      * @return the PersonB
      */
-    public Text getPersonB() {
-        return PersonB;
+    public String getFriend() {
+        return friend;
     }
 
     @Override
     public int compareTo(Friend_Tuple other_tuple) {
         
-        
-        
-        if( this.getPersonA().toString().compareTo(other_tuple.getPersonB().toString())==0)
+        if( this.getUser().compareTo(other_tuple.getUser())==0)
         {
-            int yes = this.getPersonB().toString().compareTo(other_tuple.getPersonA().toString());
-            if (yes==0)
-            {
-              log.info(this.PersonA.toString()+"-"+this.PersonB.toString());
-             // log.info(other_tuple.getPersonB().toString()+"-"+other_tuple.getPersonA().toString());  
-            }
-            return yes;
+            return this.getFriend().compareTo(other_tuple.getFriend());
         }
-        log.info(this.PersonA.toString()+"-"+this.PersonB.toString());
-        log.info(other_tuple.getPersonA().toString()+"-"+other_tuple.getPersonB().toString());
-        log.info("FUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCK YOUUUU");
-        return this.getPersonA().toString().compareTo(other_tuple.getPersonB().toString());
+        return this.getUser().compareTo(other_tuple.getUser());
         
-    }
-   @Override
-    public boolean equals(Object bj)
-    {
-        if (this == bj ) return true;
-        if (bj == null ) return false;
-        if (!(bj instanceof Friend_Tuple)) return false;
-        Friend_Tuple other_tuple = (Friend_Tuple) bj;
-        if (this.getPersonA().toString().trim().equals(other_tuple.getPersonB().toString().trim()))
-        {
-            if (this.getPersonB().toString().trim().equals(other_tuple.getPersonA().toString().trim()))
-            {
-                return true; 
-            }
-        }
-        return false;
     }
 
     @Override
     public int hashCode() {
         
-        int ascii=0;
-        byte[] a = this.getPersonA().getBytes();
-        byte[] b = this.getPersonB().getBytes();
-        int i;
-        for(i=0;i<a.length;i++)
-        {
-            ascii+=a[i];
-        }
-        //ascii.append((byte) this.separator.charAt(0));
-        for(i=a.length;i<b.length;i++)
-        {
-            ascii+=b[i-a.length];
-        }
-        return ascii;/*
-        int hash = 5;
-        hash = 29 * hash + Objects.hashCode(this.PersonA);
-        hash = 29 * hash + Objects.hashCode(this.PersonB);
-        return hash;*/
+        return user.hashCode()+friend.hashCode();
         
     }
     
     @Override
     public String toString()
     {
-        return getPersonA().toString().trim()+separator+getPersonB().toString().trim();
+        return getUser()+"-"+getFriend();
     }
 
     /**
-     * @param PersonA the PersonA to set
+     * @param user the PersonA to set
      */
-    public void setPersonA(String PersonA) {
-        this.PersonA.set(PersonA);
+    public void setUser(String user) {
+        this.user = user;
     }
 
     /**
-     * @param PersonB the PersonB to set
+     * @param friend the PersonB to set
      */
-    public void setPersonB(String PersonB) {
-        this.PersonB .set(PersonB);
+    public void setFriend(String friend) {
+        this.friend = friend;
     }
 }

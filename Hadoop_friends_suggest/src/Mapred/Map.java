@@ -18,35 +18,33 @@ import org.apache.log4j.Logger;
  *
  * @author terry
  */
-public class Map extends MapReduceBase implements Mapper<Text,Text,Text,Text> {
+public class Map extends MapReduceBase implements Mapper<Text,Text,Text,Friend_Tuple> {
 
-    private final String friendsof=" -> ";
-    //private final String endoflist=" -EOL- ";
-    private final String separator="-";
-    private Friend_Tuple ft;
+    Logger log = Logger.getLogger(Map.class);
     @Override
-    public void map(Text user, Text friends, OutputCollector<Text, Text> output, Reporter rprtr) throws IOException {
+    public void map(Text user, Text friends, OutputCollector<Text, Friend_Tuple> output, Reporter rprtr) throws IOException {
         
         String usr = user.toString().trim();
-        String[] friendlist = friends.toString().split(",");
-        
-        StringBuilder friends_string = new StringBuilder();
-        StringBuffer sb= new StringBuffer();
-        for(String name :friendlist)
+        String[] friendlist = friends.toString().split(", ");
+        if(usr.length()>1){
+        for(int i=0;i<friendlist.length;i++)
         {
-            if (name.length()>1) sb.append(name.trim()).append(" ");
+            if (friendlist[i].length()>1)
+            {
+                output.collect(new Text(usr), new Friend_Tuple(friendlist[i],"null")); // send to usr all his friends at form (user,-1) => all users are friend with usr
+                for(int j=i+1;j<friendlist.length;j++)
+                {
+                  if (friendlist[j].length()>1) 
+                  {
+                      output.collect(new Text(friendlist[i].trim()), new Friend_Tuple(friendlist[j].trim(),usr));
+                      output.collect(new Text(friendlist[j].trim()), new Friend_Tuple(friendlist[i].trim(),usr));
+                  }
+                }
+            }
+        }
                
         }
-        friends_string.append(sb);
-        for(String friend_name:friendlist)
-        {
-             Logger log = Logger.getLogger(Map.class); 
-             log.info(friend_name+"-> "+friends_string.toString()+friendsof+usr);
-            // log.debug("=================================================||========================================");
-           if (friend_name.length()>1) output.collect( new Text(friend_name.trim()),new Text(friends_string.toString()+friendsof+usr) );
-        }
-        output.collect(new Text(usr),new Text(friends_string.toString()+friendsof+usr));
-     }
+        
         
     }
 
@@ -55,4 +53,4 @@ public class Map extends MapReduceBase implements Mapper<Text,Text,Text,Text> {
    
     
     
-
+}
