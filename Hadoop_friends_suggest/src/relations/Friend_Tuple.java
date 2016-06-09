@@ -1,21 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package relations;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.Objects;
-import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.log4j.Logger;
 
 /**
  *
- * @author terry
+ * @author asteriosc
  */
 public class Friend_Tuple implements WritableComparable<Friend_Tuple>
 {
@@ -50,6 +44,20 @@ public class Friend_Tuple implements WritableComparable<Friend_Tuple>
 
     }
 
+
+    @Override
+    public int hashCode() {
+        
+        return user.hashCode()+friend.hashCode();
+        
+    }
+    
+    @Override
+    public String toString()
+    {
+        return getUser()+"-"+getFriend();
+    }
+
     /**
      * @return the PersonA
      */
@@ -73,32 +81,5 @@ public class Friend_Tuple implements WritableComparable<Friend_Tuple>
         }
         return this.getUser().compareTo(other_tuple.getUser());
         
-    }
-
-    @Override
-    public int hashCode() {
-        
-        return user.hashCode()+friend.hashCode();
-        
-    }
-    
-    @Override
-    public String toString()
-    {
-        return getUser()+"-"+getFriend();
-    }
-
-    /**
-     * @param user the PersonA to set
-     */
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    /**
-     * @param friend the PersonB to set
-     */
-    public void setFriend(String friend) {
-        this.friend = friend;
     }
 }
