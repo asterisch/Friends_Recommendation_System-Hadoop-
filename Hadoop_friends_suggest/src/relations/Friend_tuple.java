@@ -5,24 +5,24 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import org.apache.hadoop.io.WritableComparable;
-import org.apache.log4j.Logger;
+
 
 /**
  *
  * @author asteriosc
  */
-public class Friend_Tuple implements WritableComparable<Friend_Tuple>
+public class Friend_tuple implements WritableComparable<Friend_tuple>
 {
     private String user;
     private String friend;
     private final String separator="-";
-    private static Logger log= Logger.getLogger(Friend_Tuple.class);
-    public Friend_Tuple()
+
+    public Friend_tuple()
     {
         this.user = new String();
         this.friend=new String();
     }
-    public Friend_Tuple(String user,String common)
+    public Friend_tuple(String user,String common)
     {
             this.user=user.trim();
             this.friend=common.trim();
@@ -73,7 +73,7 @@ public class Friend_Tuple implements WritableComparable<Friend_Tuple>
     }
 
     @Override
-    public int compareTo(Friend_Tuple other_tuple) {
+    public int compareTo(Friend_tuple other_tuple) {
         
         if( this.getUser().compareTo(other_tuple.getUser())==0)
         {

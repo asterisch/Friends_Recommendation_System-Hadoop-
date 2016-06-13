@@ -15,7 +15,7 @@ spaced_users.close()  # close input file
 # Generate a random graph of users and their friends
 print str(len(userlist))+"\n"
 for user in userlist:
-    numberoffriends=random.randint(1,len(userlist)-1)     # Pick a random number of friends for each user
+    numberoffriends=random.randint(1,len(userlist)/2-1)     # Pick a random number of friends for each user
     rsample=random.sample(userlist,numberoffriends)         # Get a random sample from userlist with size realted to the picked random number
     for friend in rsample:      # Add this sample from userlist to user's friends
         if friend!=user:        # Do not add user to user's friend!
